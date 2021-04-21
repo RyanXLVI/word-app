@@ -3,6 +3,9 @@ const app = express();
 const port = process.env.PORT || 3001;
 const unirest = require("unirest");
 const API_KEY = "2c5a0aeb-f06c-46f8-ac1a-86d22547c9fd";
+const path = require('path');
+
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.get('/api/associations/:word', (req, res) => {
 	const word = req.params.word;
@@ -17,6 +20,10 @@ app.get('/api/associations/:word', (req, res) => {
 		res.json({status:"Error", message: `${error}`});
 	});
 });
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
+})
 
 app.listen(port, () => {
   console.log(`word-app listening on port ${port}`);
